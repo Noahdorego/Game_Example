@@ -1,0 +1,2633 @@
+/**
+
+
+CREDIT TO: JstuffJr for the pixel font, on Pixel Dash.
+
+Those days you feel like playing a mini game.
+Have fun :)
+
+*/
+
+
+
+
+
+
+
+
+var page = "home";
+
+
+//Button
+var colorLeader = 0;
+var colorLeaderS = 5;
+var button = function(x,y,w,h,STATE,M)
+{
+    
+    textFont(createFont("Tahoma Bold"), 50);
+    noFill();
+    strokeWeight(3);
+    stroke(0, 0, 0);
+    rect(x,y+2,w,h,5);
+    
+    strokeWeight(3);
+    stroke(155-colorLeader, 11+colorLeader/1.5, 43);
+    noFill();
+    if(mouseX<x+w &&mouseX>x &&mouseY<y+h && mouseY>y)
+    {
+        fill(255, 255, 255,150);
+        cursor(HAND);
+        y+=2;
+        
+    }
+    if(mouseIsPressed&&mouseX<x+w &&mouseX>x &&mouseY<y+h && mouseY>y)
+    {
+        page=STATE;
+    }
+    textAlign(CENTER,CENTER);
+    rect(x,y,w,h,5);
+    fill(155-colorLeader, 11+colorLeader/1.5, 43);
+    textSize(h/2);
+    text(M, x*1.6,y*1.25);
+    textFont(createFont("Calabri (body)"), 50);
+    
+    fill(255, 255, 255,100);
+    noStroke();
+    rect(x,y,w,h/2,5);
+};
+
+//Pixel Dash
+{
+//pixel X/Y store.variables
+var xPositions = [],yPositions = [];
+
+//player cordinates
+var playerX = 200,playerY = 392;
+
+//score animations
+var end = false,numTime = 0,time = 0,MOVE_Score = 0,trans = 0;
+
+//Best score animations
+var best = 0,bestB = -300,restartB = 100;
+
+//menu state
+var startState = true;
+
+//cool animation
+var CoolAnim = 0;
+
+//difficulty/delayTimer
+var delayTimer = 15,Dificulty = 3; 
+
+//Pixel Font
+var drawLetter = function(letter, x, y, size){
+    if(letter === "A"){
+        rect(x + size, y, size, size);
+        rect(x, y + size, size, 4*size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + 2*size, y + size, size, 4*size);
+    }
+    if(letter === "B"){
+            rect(x + size, y, size, size);
+            rect(x, y, size, 5*size);
+            rect(x + 2*size, y + size, size, size);
+            rect(x + size, y + 2*size, size, size);
+            rect(x + 2*size, y + 3*size, size, size);
+            rect(x + size, y + 4*size, size, size);
+    }
+    if(letter === "C"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, 3*size);
+        rect(x + size, y + 4*size, 2*size, size);
+    }
+    if(letter === "D"){
+        rect(x, y, size, 5*size);
+        rect(x + size, y, size, size);
+        rect(x + size, y + 4*size, size, size);
+        rect(x + 2*size, y + size, size, 3*size);
+    }
+    if(letter === "E"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, size);
+        rect(x + size, y + 2*size, 2*size, size);
+        rect(x, y + 3*size, size, size);
+        rect(x + size, y + 4*size, 2*size,size);
+    }
+    if(letter === "F"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, size);
+        rect(x + size, y + 2*size, 2*size, size);
+        rect(x, y + 3*size, size, 2*size);
+    }
+    if(letter === "G"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, 3*size);
+        rect(x + size, y + 4*size, 2*size, size);
+        rect(x + 2*size, y + 3*size, size, size);
+    }
+    if(letter === "H"){
+        rect(x, y, size, 5*size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + 2*size, y, size, 5*size);
+    }
+    if(letter === "I"){
+        rect(x, y, size, 5*size);
+    }
+    if(letter === "J"){
+        rect(x, y, 3*size, size);
+        rect(x + 1*size, y + size, size, 3*size);
+        rect(x, y + 4*size, size, size);
+    }
+    if(letter === "K"){
+        rect(x, y, size, 5*size);
+        rect(x + size, y + size, size, 2*size);
+        rect(x + 2*size, y, size, size);
+        rect(x + 2*size, y + 3*size, size, 2*size);
+    }
+    if(letter === "L"){
+        rect(x, y, size, 4*size);
+        rect(x + size, y + 4*size, size, size);
+    }
+    if(letter === "M"){
+        rect(x, y + size, size, 4*size);
+        rect(x + size, y, size, size);
+        rect(x + 2*size, y + size, size, 3*size);
+        rect(x + 3*size, y, size, size);
+        rect(x + 4*size, y + size, size, 4*size);
+    }
+    if(letter === "N"){
+        rect(x, y, size, 5*size);
+        rect(x + size, y, size, 2*size);
+        rect(x + 2*size, y + 2*size, size, 2*size);
+        rect(x + 3*size, y, size, 5*size);
+    }
+    if(letter === "O"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, 3 * size);
+        rect(x + 3*size, y + size, size, 3 * size);
+        rect(x + size, y + 4*size, 2*size, size);
+    }
+    if(letter === "P"){
+        rect(x + size, y, size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x, y + size, size, 4*size);
+        rect(x + size, y + 2*size, size, size);
+    }
+    if(letter === "Q"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, 2*size);
+        rect(x + 3*size, y + size, size, 2*size);
+        rect(x + size, y + 3*size, 2*size, size);
+        rect(x + 3*size, y + 4*size, size, size);
+    }
+    if(letter === "R"){
+        rect(x, y + size, size, 4*size);
+        rect(x + size, y, size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + 2*size, y + 3*size, size, 2*size);
+    }
+    if(letter === "S"){
+        rect(x + size, y, 2*size, size);
+        rect(x, y + size, size, size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + 2*size, y + 3*size, size, size);
+        rect(x, y + 4*size, 2*size, size);
+    }
+    if(letter === "T"){
+        rect(x, y, 3*size, size);
+        rect(x + size, y + size, size, 4*size);
+    }
+    if(letter === "U") {
+        rect(x, y, size, 4 *size);
+        rect(x + size, y + 4 * size, 2*size, size);
+        rect(x + 3 * size, y, size, 4 *size);
+    }
+    if(letter === "V") {
+        rect(x, y, size, 4 *size);
+        rect(x + size, y + 4 * size, size, size);
+        rect(x + 2 * size, y, size, 4 *size);
+    }
+    if(letter === "W"){
+        rect(x, y, size, 3*size);
+        rect(x + size, y + 3*size, size, 2*size);
+        rect(x + 2*size, y + size, size, 2*size);
+        rect(x + 3*size, y + 3*size, size, 2*size);
+        rect(x + 4*size, y, size, 3*size);
+    }
+    if(letter === "X"){
+        rect(x, y, size, 2*size);
+        rect(x + 2*size, y, size, 2*size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x, y + 3*size, size, 2*size);
+        rect(x + 2*size, y + 3*size, size, 2*size);
+    }
+    if(letter === "Y"){
+        rect(x, y, size, 2*size);
+        rect(x + 2*size, y, size, 2*size);
+        rect(x + size, y + 2*size, size, 3 * size);
+    }
+    if(letter === "Z"){
+        rect(x, y, 3*size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x, y + 3*size, size, size);
+        rect(x, y + 4*size, 3*size, size);
+    }
+    if(letter === "1"){
+        rect(x + size, y, size, 5*size);
+        rect(x, y + size, size, size);
+    }
+    if(letter === "2"){
+        rect(x, y, 2*size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x, y + 3*size, size, size);
+        rect(x, y + 4*size, 3*size, size);
+    }
+    if(letter === "3"){
+        rect(x, y, 2*size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x, y + 2*size, 2*size, size);
+        rect(x + 2*size, y + 3*size, size, size);
+        rect(x, y + 4*size, 2*size, size);
+    }
+    if(letter === "4"){
+        rect(x , y, size, 2*size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + 2*size, y, size, 5*size);
+    }
+    if(letter === "5"){
+        rect(x, y, 3*size, size);
+        rect(x, y + size, size, size);
+        rect(x + size, y + 2*size, 2*size, size);
+        rect(x + 2*size, y + 3*size, size, size);
+        rect(x, y + 4*size, 2*size, size);
+    }
+    if(letter === "6"){
+        rect(x, y, size, 4*size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + size, y + 4*size, size, size);
+        rect(x + 2*size, y + 3*size, size, size);
+    }
+    if(letter === "7"){
+        rect(x, y, 3*size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x + size, y + 2*size, size, 3*size);
+    }
+    if(letter === "8"){
+        rect(x + size, y, size, size);
+        rect(x, y + size, size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x, y + 3*size, size, size);
+        rect(x + 2*size, y + 3*size, size, size);
+        rect(x + size, y + 4*size, size, size);
+    }
+    if(letter === "9"){
+        rect(x + size, y, size, size);
+        rect(x, y + size, size, size);
+        rect(x + 2*size, y + size, size, 4*size);
+        rect(x + size, y + 2*size, size, size);
+    }
+    if(letter === "0"){
+        rect(x + size, y, size, size);
+        rect(x, y + size, size, 3*size);
+        rect(x + size, y + 4*size, size, size);
+        rect(x + 2*size, y + size, size, 3*size);
+    }
+    if(letter === ":"){
+        rect(x, y + size, size, size);
+        rect(x, y + 4*size, size, size);
+    }
+    if(letter === "!"){
+        rect(x, y, size, 3*size);
+        rect(x, y + 4*size, size, size);
+    }
+    if(letter === "."){
+        rect(x, y + 4*size, size, size);
+    }
+    if(letter === "?"){
+        rect(x, y, 2*size, size);
+        rect(x + 2*size, y + size, size, size);
+        rect(x + size, y + 2*size, size, size);
+        rect(x + size, y + 4*size, size, size);
+    }
+    if(letter === "#"){
+        rect(x + 2*size, y, size, size);
+        rect(x + 4*size, y, size, size);  
+        rect(x + size, y + 2*size, size, size);
+        rect(x + 3*size, y + 2*size, size, size); 
+        rect(x, y + 4*size, size, size);
+        rect(x + 2*size, y + 4*size, size, size);
+        rect(x, y + size, 5*size, size);
+        rect(x, y + 3*size, 5*size, size);
+    }
+};
+var drawWord = function(word, x, y, size){
+    var wordArray = [];
+    for(var i = 0; i<= word.length; i++){
+        wordArray[i] = word.charAt(i);
+    }
+    for(i = 0; i <= wordArray.length; i++){
+        if(wordArray[i] !== " "){
+            drawLetter(wordArray[i], x, y, size);
+        }
+        
+        if(wordArray[i] === "W" || wordArray[i] === "M" || wordArray[i] === "#"){
+            x += 6 * size;
+        }
+        else if(wordArray[i] === "N" || wordArray[i] === "O" || wordArray[i] === "Q" || wordArray[i] === "U"){
+            x += 5 * size;
+        }
+        else if(wordArray[i] === "L" || wordArray[i] === "1" || wordArray[i] === " "){
+            x += 3 * size;
+        }
+        else if(wordArray[i] === "I" || wordArray[i] === ":" || wordArray[i] === "." || wordArray[i] === "!"){
+            x += 2 * size;
+        }
+        else{
+            x += 4 * size;
+        }
+        
+    }
+};
+
+var block_pd = function(x,y,w,h){
+    
+    //guy
+    noStroke();
+    fill(155, 0, 0);
+    if(playerX<x+w&&playerX>x-8&&playerY>y-8&&playerY<y+h)
+    {
+        fill(0, 160, 163);
+        end=true;
+    }
+
+    rect(x,y,w,h); 
+
+};
+
+//Engine
+var ENGINE = function(){
+
+
+    noStroke();
+    fill(255, 0, 0);
+    for (var i = 0; i < xPositions.length; i++) {
+        block_pd(xPositions[i],yPositions[i],8,8);
+        if(end===false){
+        yPositions[i] += 4;
+        }
+        yPositions.push(i);
+
+        if(yPositions[i] > height+20) {
+            yPositions.splice(i, 1);
+            xPositions.splice(i, 1);
+        }
+        
+    }
+    
+    delayTimer++;
+    if(end===false){
+    if (delayTimer >= Dificulty) {
+        yPositions.push(0); //add a Y position to the array
+        xPositions.push(random(0, 400)); //add X position at random location
+        delayTimer = 0; //reset the timer
+    }
+    }
+    
+};
+
+//Player
+var player = function(){
+
+fill(0, 217, 255);
+rect(playerX,playerY,8,8);
+if(end===false){
+if(keyCode===LEFT&&keyIsPressed)
+{
+    playerX-=3;
+}
+if(keyCode===RIGHT&&keyIsPressed)
+{
+    playerX+=3;
+}
+}
+if(playerX<0)
+{
+    playerX=0;
+}
+if(playerX>392)
+{
+    playerX=392;
+}
+
+};
+
+//Score Graphics
+var score = function(){
+    if(end===false){
+    numTime+=1;
+    if(numTime>60)
+    {
+        numTime=0;
+        time+=1;
+    }
+    }
+    
+    if(end===true)
+    {
+        fill(0, 0, 0,trans);
+        rect(0,0,400,400);
+        trans+=5;
+
+        noStroke();
+    }
+    if(trans>200)
+    {
+        trans=200;
+    }
+    if(bestB>1)
+    {
+        bestB=1;
+        restartB-=5;
+    }
+    if(restartB<1)
+    {
+        restartB=1;
+    }
+    if(end===true)
+    {
+        button(0,350,75,50,"home","           HOME\n\n\n\n");
+        noStroke();
+    }
+    
+    //Restart button
+    fill(255, 0, 0);
+    if(mouseX<125+150&&mouseX>125&&mouseY<300+50+restartB&&mouseY>300+restartB)
+    {
+        fill(255, 255, 255);
+    }
+    rect(125,300+restartB,150,50);
+    
+    fill(255, 255, 255);
+    if(mouseX<125+150&&mouseX>125&&mouseY<300+50+restartB&&mouseY>300+restartB)
+    {
+        fill(255, 0, 0);
+    }
+    drawWord("RESTART", 145,315+restartB,4);
+    
+    if(mouseIsPressed&&mouseX<125+150&&mouseX>125&&mouseY<300+50+restartB&&mouseY>300+restartB)
+    {
+        bestB=-300;
+        numTime=0;
+        time=0;
+        trans=0;
+        restartB=100;
+        MOVE_Score=0;
+        end=false;
+        xPositions = [0];
+        yPositions = [0];
+    }
+    
+    
+    fill(0+MOVE_Score*5, 0, 0);
+    drawWord("TIME: "+time, 0+MOVE_Score/2, 3+MOVE_Score, 3+MOVE_Score/30);
+    
+    fill(255, 255, 255);
+    drawWord("BEST: "+best, 135+bestB, 250, 5);
+    
+    if(end===true)
+    {
+        MOVE_Score+=10;
+    }
+    if(MOVE_Score>175)
+    {
+        MOVE_Score=175;
+        bestB+=10;
+    }
+    if(best<time)
+    {
+        best=time;
+    }
+    
+    
+};
+}
+var PixelDash = function(){
+    
+    background(255, 255, 255);
+    if(startState===false)
+    {
+        ENGINE(); 
+        player();
+        score();
+    }
+    if(startState===true)
+    {
+        noStroke();
+        fill(0, 0, 0,100);
+        drawWord("PIXEL DASH", 8+3,15+3,11);
+        rect(150,155,100,50);
+        fill(255, 0, 0);
+        drawWord("PIXEL DASH", 8,15,11);
+        
+        
+        fill(0, 0, 0);
+        drawWord("SIMPLE AND FUN GAME", 45,80,4);
+        
+        fill(255, 0, 0);
+        if(mouseX<150+100&&mouseX>150&&mouseY<150+50&&mouseY>150)
+        {
+            fill(0, 0, 0);
+            CoolAnim=5;
+        }else
+        {
+            CoolAnim=0;
+        }
+        rect(150,150+CoolAnim,100,50);
+        fill(0, 0, 0);
+        if(mouseX<150+100&&mouseX>150&&mouseY<150+50&&mouseY>150)
+        {
+            fill(255, 0, 0);
+        }
+        drawWord("PLAY", 173,165+CoolAnim,4);
+        if(mouseIsPressed&&mouseX<150+100&&mouseX>150&&mouseY<150+50&&mouseY>150)
+        {
+            startState=false;
+        }
+        button(0,350,75,50,"home","           HOME\n\n\n\n");
+        
+    }
+
+};
+
+//Spidey Square
+{
+var playerX2 = 50;
+var playerY2 = 200;
+var playerYS = 1.5;
+var speed = 3;
+var blockX = random(-150,-350);
+var blockY = random(0,350);
+var blockX2 = random(-150,-350);
+var blockY2 = random(0,350);
+var blockX3 = random(-150,-350);
+var blockY3 = random(0,350);
+var blockX4 = random(-150,-350);
+var blockY4 = random(0,350);
+var blockX5 = random(-150,-350);
+var blockY5 = random(0,350);
+var blockX6 = random(-150,-350);
+var blockY6 = 0;
+var scoreN = 0;
+var rotateC = 0;
+var end = false;
+var coolanim = 0;
+var bloskSpeed = 2;
+var string = 200;
+var dieAim = false;
+var scoreNim = 0;
+var playerDieAnim = 0;
+var speedAnimP = 6;
+var bestScore = 0;
+var startState = true;
+var howTo = false;
+var emeraldSpin = 0;
+var logoState=false;
+var logoNim = 0;
+}
+var SpideySaure = function(){
+//Logo
+var logo= function() {
+    
+    fill(0, 0, 0);
+    rect(0,370,400,30);
+    ellipse(25,375,61,57);
+    
+    fill(0, 255, 13,100);noStroke();pushMatrix();translate(26,375);rectMode(CENTER);rotate(emeraldSpin);rect(0,0,35,35);rotate(45/2);rect(0,0,35,35);rotate(45);rect(0,0,35,35);rotate(157);rect(0,0,35,35);rectMode(0);
+    popMatrix();
+    emeraldSpin+=1;
+    
+    fill(1, 84, 9);
+    textAlign(CENTER,CENTER);
+    textSize(33);
+    fill(0, 0, 0);
+    text("iE",26,375);
+    textSize(25);
+    fill(0, 255, 13);text("P R O G R A M M I N G",180,385-2);text("P R O G R A M M I N G",180,385+2);text("P R O G R A M M I N G",180-2,385);text("P R O G R A M M I N G",180+2,385);fill(0, 0, 0);text("P R O G R A M M I N G",180,385);
+
+};
+
+//@block's
+var badFunction = function(x,y,w,h){
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
+    
+};
+var badLook = function(bad){
+    
+    //guy
+    noStroke();
+    fill(155+frameCount%100, 0, 0);
+    if(playerX2<bad.x+bad.w&&playerX2>bad.x-20&&playerY2>bad.y-20&&playerY2<bad.y+bad.h)
+    {
+        fill(0);
+        dieAim=true;
+        
+    }
+
+    rect(bad.x,bad.y,bad.w,bad.h); 
+
+}; 
+
+//player
+var player = function(){
+
+noStroke();
+fill(0);
+
+pushMatrix();
+rectMode(CENTER);
+translate(60,playerY2+10+playerDieAnim);
+rotate(rotateC);
+//player square
+rect(0,0,20,20);
+rectMode(0);
+popMatrix();
+rotateC+=2;
+fill(255, 255, 255);
+ellipse(playerX2+6,playerY2+8+playerDieAnim,8,8);  
+ellipse(playerX2+14,playerY2+8+playerDieAnim,8,8);  
+fill(0, 0, 0);
+ellipse(playerX2+8,playerY2+8+playerDieAnim,4,4);  
+ellipse(playerX2+16,playerY2+8+playerDieAnim,4,4);  
+
+if(startState===true)
+{
+    fill(0, 0, 0);
+    rect(58,0,2,playerY2+2);
+    ellipse(58,5,20,20);
+}
+
+if(playerX2<1)
+{
+    playerX2=1;
+}
+if(playerY2<1)
+{
+    playerY2=1;
+}
+if(playerY2>380){
+    playerY2=380;
+}
+if(dieAim===false&&startState===false){
+playerY2+=playerYS;
+if(mouseIsPressed){
+    playerYS=-4;
+    rotateC-=15;
+    bloskSpeed=3;
+    noStroke();
+    strokeWeight(2);
+    stroke(0, 0, 0);
+    line(string,0,playerX2+5,playerY2+5);
+    string-=5;
+    ellipse(string+5,0,10,10);
+    
+}else{
+    playerYS=2;
+    bloskSpeed=2;
+    string=200;
+}
+}
+};
+
+//main block positions
+var block = function(){
+    
+var badG = new badFunction(350-blockX,0+blockY,30,30); badLook(badG);
+if(dieAim===false&&startState===false){
+blockX+=bloskSpeed;
+if(blockX>400)
+{
+    blockX=random(-100,-350);
+    blockY=random(0,370);
+    scoreN+=1;
+}
+}
+
+var badG = new badFunction(350-blockX2,0+blockY2,30,30); badLook(badG);
+if(dieAim===false&&startState===false){
+blockX2+=bloskSpeed;
+if(blockX2>400)
+{
+    blockX2=random(-50,-350);
+    blockY2=random(0,370);
+    scoreN+=1;
+}
+}
+
+var badG = new badFunction(350-blockX3,0+blockY3,30,30); badLook(badG);
+if(dieAim===false&&startState===false){
+blockX3+=bloskSpeed;
+if(blockX3>400)
+{
+    blockX3=random(-50,-350);
+    blockY3=random(0,370);
+    scoreN+=1;
+}
+}
+
+var badG = new badFunction(350-blockX4,0+blockY4,45,45); badLook(badG);
+if(dieAim===false&&startState===false){
+blockX4+=bloskSpeed;
+if(blockX4>400)
+{
+    blockX4=random(-50,-350);
+    blockY4=random(0,355);
+    scoreN+=1;
+}
+}
+
+var badG = new badFunction(350-blockX5,0+blockY5,40,40); badLook(badG);
+if(dieAim===false&&startState===false){
+blockX5+=bloskSpeed;
+if(blockX5>400)
+{
+    blockX5=random(-50,-350);
+    blockY5=random(0,360);
+    scoreN+=1;
+}
+}
+
+var badG = new badFunction(350-blockX6,0+blockY6,60,60); badLook(badG);
+if(dieAim===false&&startState===false){
+blockX6+=bloskSpeed;
+if(blockX6>420)
+{
+    blockX6=random(-50,-350);
+    blockY6=random(0,340);
+    scoreN+=1;
+}
+}
+
+var badG = new badFunction(0,0,400,10); badLook(badG);
+var badG = new badFunction(0,390,400,10); badLook(badG);
+
+};
+
+//score graphics
+var score = function(){
+if(startState===false){
+textAlign(CENTER,CENTER);
+
+fill(0, 26*coolanim*5+scoreNim, 255);
+textSize(20+coolanim+scoreNim);
+text("Score: "+scoreN,200,35+scoreNim*2);
+
+coolanim-=1;
+if(coolanim<1){
+    coolanim=1;
+}
+
+}
+};
+
+//color of the backround
+var back = function()
+{
+background(255, 255, 255);
+};
+
+//reset and score, and menu stuff
+var restart_score = function(){
+    if(dieAim===true){
+        scoreNim+=3;
+        playerDieAnim-=speedAnimP;
+    }
+    if(scoreNim>50){
+        button(0,350,75,50,"home","           HOME\n\n\n\n");
+        noStroke();
+        scoreNim=50;
+        fill(0, 26, 255);
+        if(mouseX<100+200&&mouseX>100&&mouseY<200+50&&mouseY>200)
+        {
+            fill(3, 14, 97);
+        }
+        if(mouseIsPressed&&mouseX<100+200&&mouseX>100&&mouseY<200+50&&mouseY>200)
+        {
+                blockX=random(-100,-350);
+                blockY=random(0,370);
+                blockX2=random(-100,-350);
+                blockY2=random(0,370);
+                blockX3=random(-100,-350);
+                blockY3=random(0,370);
+                blockX4=random(-100,-350);
+                blockY4=random(0,370);
+                blockX5=random(-100,-350);
+                blockY5=random(0,370);
+                blockX6=random(-100,-350);
+                blockY6=random(0,370);
+                scoreN=0;
+                dieAim = false;
+                scoreNim = 0;
+                playerDieAnim = 0;
+                playerY2=200;
+                speedAnimP=6;
+                string=200;
+        }
+        rect(100,200,200,50);
+        textSize(20);
+        fill(242);
+        text("RESTART",200,225);
+        
+        fill(122, 122, 122);
+        rect(0,281,400,65);
+        fill(20, 20, 19);
+        textSize(50);
+        text("Best: "+bestScore,200,319);        
+        fill(255, 0, 0);
+        if(bestScore===scoreN){
+            textSize(20);
+            text("*NEW*",200,292);
+        }
+    }
+    if(playerDieAnim<-50){
+        speedAnimP=-7;
+    }
+    if(bestScore<scoreN){
+        bestScore=scoreN;
+    }
+    
+    if(startState===true)
+    {
+        if(howTo ===false){
+        fill(255, 0, 0,150);
+        if(mouseX<250+100&&mouseX>250&&mouseY<100+50&&mouseY>100)
+        {
+            fill(255, 0, 0);
+        }
+        rect(250-0,100,100,50);
+        
+        
+        fill(255, 0, 0,150);
+        if(mouseX<250+100&&mouseX>250&&mouseY<160+50&&mouseY>160)
+        {
+            fill(255, 0, 0);
+        }
+        rect(250,160,100,50);
+        if(mouseIsPressed&&mouseX<250+100&&mouseX>250&&mouseY<160+50&&mouseY>160)
+        {
+            howTo=true;
+        }
+        }
+        
+        textSize(23);
+        fill(5, 5, 5);
+        textAlign(CENTER,CENTER);
+        if(howTo ===false)
+        {
+                        
+            strokeWeight(2);
+            stroke(66, 66, 66,50);
+            noFill();
+
+            
+            ellipse(200,53,174,10);
+            ellipse(200,53,174+25,10+25);
+            ellipse(200,53,174+50,10+50);
+            ellipse(200,53,174+75,10+75);
+            ellipse(200,53,174+100,10+100);
+            fill(66, 66, 66,50);
+            noStroke();
+
+            arc(200,53,174+107,10+111,0+25,1+25);
+            arc(200,53,174+107,10+111,0+25+25,1+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25,1+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25,1+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25,1+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25,1+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25+25);
+            arc(200,53,174+107,10+111,0+25+25+25+25+25+25+25+25+25+25+25+25+25+25,1+25+25+25+25+25+25+25+25+25+25+25+25+25+25);
+            fill(0, 0, 0);
+            text("PLAY",301,125);
+            text("HOW",301,186);
+            textSize(38);
+            fill(0, 0, 0);
+            text("Spidey Square",200,34);
+
+            fill(0, 0, 0);
+            textSize(20);
+            text("The Game",200,70);
+            logo();
+            
+        button(0,250,75,50,"home","           HOME\n\n");
+        }
+        if(howTo ===false){
+        if(mouseIsPressed&&mouseX<250+100&&mouseX>250&&mouseY<100+50&&mouseY>100)
+        {
+            startState=false;
+        }
+        }
+        if(howTo ===true){
+            fill(0, 0, 0);
+            textSize(17);
+            text("(1) - Press on the screen to go up\n(2) - Dodge The Lava                   \n      (3) - Release your mouse to go down\nNOTE: works on Computer & \nmobile devices",214,177);
+            fill(255,0,0,150);
+            if(mouseX<100+100&&mouseX>100&&mouseY<250+50&&mouseY>250)
+            {
+                fill(255, 0, 0);
+            }
+            if(mouseIsPressed&&mouseX<100+100&&mouseX>100&&mouseY<250+50&&mouseY>250)
+            {
+                howTo=false;
+            }
+            rect(100,250,100,50);
+            
+            textSize(23);
+            fill(0, 0, 0);
+            text("BACK",150,276);
+        }
+        
+        
+    }
+
+};
+
+//Logo
+var logoS = function(){
+if(logoState===true){
+    background(0, 187, 255);
+    noStroke();
+    fill(255, 255, 255);
+    rect(175,200,50,50);
+    rect(212,181,13,43);
+    rect(222,212,13,38);
+    fill(0, 0, 0,150);
+    rect(183,200,2,24);
+    rect(196,200,2,24);
+    rect(209,200,2,24);
+    rect(224,212,2,18);
+    
+    strokeWeight(5);
+    stroke(0, 0, 0);
+    line(210,176,183,144);
+    line(218,176,217,133);
+    line(226,176,246,144);
+    
+    textSize(33);
+    textAlign(CENTER,CENTER);
+    fill(0, 0, 0);
+    text("A tappy Games Production",200,298);
+    fill(0, 143, 10);
+    textSize(20);
+    text("Isaac Emerald Software",200,331);
+    
+    logoNim+=1;
+    if(logoNim>300)
+    {
+        logoState=false;
+    }
+    noStroke();
+    fill(255, 255, 255,logoNim);
+    rect(0,0,400,400);
+}
+
+};
+
+//get all the material
+var game = function(){
+    if(logoState===false)
+    {
+        back();
+        block();
+        player();
+        score();
+        restart_score();
+    }
+    logoS();
+};
+game();
+
+};
+
+//Worlds most stupid Game
+{
+    
+    
+    
+    //Backround color    
+    var back = color(189, 189, 189);
+    
+    //Side to side speed
+    var speed = 3;
+    
+    //Side to side
+    var side=0;
+    
+    //Up and down speed
+    var speed2 = 3;
+    
+    //Up and down
+    var up=0;
+    
+    //Die state
+    var end = false;
+    
+    //acceleration
+    var excelerate = 0;
+    
+    //Meters in general
+    var meters = 0;
+    
+    //How fast the meters go
+    var meterSpeed = 1;
+    
+    //How to state
+    var howTo = false;
+    
+    //How far the lightning go's
+    var outWard = 10;
+    
+    //How much lighning is there
+    var HowMuch = 484;
+    
+    var emeraldSpin = 0;
+    
+    
+}
+var wmsg = function(){
+
+    //background(181, 179, 181);
+    textAlign(CENTER,CENTER);    
+      
+    if(end===false){  
+    background(back);
+    //Size of lightning
+    strokeWeight(5);
+    //Keeps the lines - lines
+    noFill();
+    //Lightning
+    beginShape();
+    for(var i = 0; i<HowMuch;i+=50)
+    {
+        
+        //Color of lightning    
+        stroke(random(0,200));
+        
+        //Lighning Vertex
+        vertex(6+random(-outWard,outWard),-8+i);
+    }
+    endShape();
+    beginShape();
+    for(var i = 0; i<HowMuch;i+=50)
+    {
+        
+        //Color of lightning    
+        stroke(random(0,200));
+        
+        //Lighning Vertex
+        vertex(392+random(-outWard,outWard),-8+i);
+    }
+    endShape();
+    beginShape();
+        for(var i = 0; i<HowMuch;i+=50)
+        {
+            vertex(2+i,4+random(-outWard,outWard));
+        }
+    endShape();
+    beginShape();
+        for(var i = 0; i<HowMuch;i+=50)
+        {
+            vertex(1+i,397+random(-outWard,outWard));
+        }
+    endShape();
+    
+    //Player Functions
+    fill(51, 51, 51);
+    strokeWeight(3);
+    rect(200+side,200+up,20,20);    
+    side+=speed;    
+    up+=speed2;
+    excelerate+=0.005;
+    
+    //Go Right
+    if(keyCode===RIGHT)
+    {
+        speed=3+excelerate;
+    }    
+    //Go Left
+    if(keyCode===LEFT)
+    {
+        speed=-3-excelerate;
+    }   
+    
+    //Go up
+    if(keyCode===UP)
+    {
+    speed2=-3-excelerate;
+    }
+    
+    //Go down
+    if(keyCode===DOWN)
+    {
+    speed2=3+excelerate;
+    }
+    
+    //Collide stuff
+    if(side>180)
+    {
+        end=true;    
+    }
+    if(side<-220)
+    {
+        end=true;    
+    }
+    if(up>180)
+    {
+        end=true;    
+    }
+    if(up<-220)
+    {
+        end=true;    
+    }
+    
+    //Meters
+    textSize(25);
+    fill(51, 51, 51);
+    text("Time = "+meters,200,23);
+    meters+=meterSpeed;
+    
+    }
+    
+    //When you die 
+    if(end===true){
+    background(back);
+    textSize(40);
+    fill(54, 54, 54);
+    text("YOU DIED :(\nTime = "+meters,200,165);
+    
+    //Try again
+    fill(135, 135, 135);
+    if(mouseX<50+300&&mouseX>50&&mouseY<150+100+100&&mouseY>150+100)
+    {
+        fill(41, 41, 41);
+    }
+    rect(50,150+100,300,100);
+    textSize(51);
+    fill(41, 41, 41);
+    if(mouseX<50+300&&mouseX>50&&mouseY<150+100+100&&mouseY>150+100)
+    {
+        fill(135, 135, 135);
+    }
+    text("TRY AGAIN",200,197+100);
+    
+    button(0,350,75,50,"home","           HOME\n\n\n\n");
+    noStroke();
+    if(mouseIsPressed&&mouseX<50+300&&mouseX>50&&mouseY<150+100+100&&mouseY>150+100){
+        side=0;
+        up=0;
+        excelerate=0;
+        end=false;
+        meters=0;
+        
+    }
+    
+    
+    }    
+    
+    
+
+};
+
+//SquareBert 2
+{
+    
+var playerX3 = 0;
+var playerY3 = 0;
+var level = 1;
+var time2 = 0;
+var keyState = true;
+var dieS2 = -13;
+var dieState2 = false;
+var numTimPerSecond = 0;
+var end = false;
+var speed = 3;
+var eyeX = 0;
+var eyeY = 0;
+var mouth = 0;
+var mouthS = 1;
+var puaseState = false;
+var other = 0;
+var finish = false;
+var startState2 = true;
+var HowTo = false;
+var playerColor = color(0, 9, 255);
+var playerColor_page = false;
+var buttonX = 350;
+
+
+//font
+var TXT_look = function(x,y,MESSAGE,S,Color,Color2,OutLineStroke)
+{
+    //Keeps the TXT center
+    textAlign(CENTER,CENTER);
+    
+    //Size
+    textSize(S);
+    
+    //Shade    
+    fill(0, 0, 0,150);
+    text(MESSAGE,x+OutLineStroke+2,y+OutLineStroke+2);
+    
+    //Stroke
+    fill(Color2);text(MESSAGE,x+OutLineStroke,y);text(MESSAGE,x-OutLineStroke,y);text(MESSAGE,x,y-OutLineStroke);text(MESSAGE,x,y+OutLineStroke);text(MESSAGE,x-OutLineStroke,y-OutLineStroke);text(MESSAGE,x+OutLineStroke,y+OutLineStroke);
+    
+    //Main letters
+    fill(Color);
+    text(MESSAGE,x,y);
+
+};
+
+//@block's
+var badFunction = function(x,y,w,h)
+{
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
+    
+};    
+var badLook = function(bad){
+    
+    //guy
+    noStroke();
+    fill(205+frameCount%70, 0, 0);
+    if(playerX3<bad.x+bad.w&&playerX3>bad.x-20&&playerY3>bad.y-20&&playerY3<bad.y+bad.h)
+    {
+        dieState2=true;
+        
+    }
+
+    rect(bad.x,bad.y,bad.w,bad.h); 
+
+};  
+
+//@portal
+var portalF = function(x,y,w,h)
+{
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
+    
+};    
+var portalL = function(bad){
+
+    //guy
+    fill(0, 85, 255);
+    
+    if(playerX3<bad.x+bad.w&&playerX3>bad.x-20&&playerY3>bad.y-20&&playerY3<bad.y+bad.h)
+    {
+        level+=1;
+    }
+    
+   
+    
+    noStroke();
+    fill(0, 0, 0,100);
+    rect(bad.x-frameCount%10,bad.y-frameCount%10,bad.w+frameCount%10+frameCount%10,bad.h+frameCount%10+frameCount%10);
+    
+    stroke(230, 0, 255);
+    strokeWeight(2);
+    fill(184, 0, 240);
+    rect(bad.x,bad.y,bad.w,bad.h);
+    fill(0, 0, 0,100);
+    noStroke();
+    for(var i =0;i<10;++i)
+    {
+        rect(bad.x+random(0,20),bad.y+random(0,20),bad.w-20,bad.h-20);
+    }
+}; 
+
+
+//All credit to swax97 for unglitched KEY-CODE
+var keys = [];
+
+//only if keyCode is pressed - Move
+var keyPressed = function(){        //
+    keys[keyCode] = true;           //  
+};  
+
+//Making keyCode go back to normal
+var keyReleased = function(){       //
+    keys[keyCode] = false;  
+    eyeX=0;
+    eyeY=0;//
+};
+
+//Main Movment
+var movment = function() {
+    
+    if (keys[UP]){            
+        playerY3-=speed; 
+        eyeY=-2;
+    } else if (keys[DOWN]){  
+        playerY3+=speed;        
+        eyeY=2;
+    }                         
+    
+    if (keys[RIGHT]){         
+        playerX3+=speed;   
+        eyeX=2;
+    } else if (keys[LEFT]){   
+        playerX3-=speed; 
+        eyeX=-2;
+    }                            
+};
+
+
+}
+var SQ2 = function(){
+
+//paper background
+var back = function(){
+    
+textAlign(0,0);
+background(247, 247, 247);
+fill(255, 0, 0,60);
+noStroke();
+rect(44,0,2,400);
+
+fill(0, 13, 255,60);
+for(var i = 0;i<379;i+=20){
+rect(0,40+i,400,2);
+}
+
+};
+
+//PLayer
+var player = function(){
+
+noStroke();
+fill(playerColor);
+rect(playerX3,playerY3,20,20,5);  
+fill(255, 255, 255);
+ellipse(playerX3+6,playerY3+6,8,8);  
+ellipse(playerX3+14,playerY3+6,8,8);  
+fill(0, 0, 0);
+ellipse(playerX3+6+eyeX,playerY3+6+eyeY,4,4);  
+ellipse(playerX3+14+eyeX,playerY3+6+eyeY,4,4);  
+
+if(dieState2===false)
+{
+movment();
+}
+
+if(playerX3<1)
+{
+    playerX3=1;
+}
+if(playerY3<1)
+{
+    playerY3=1;
+}
+
+if(playerX3>380)
+{
+    playerX3=380;
+}
+if(playerY3>380)
+{
+    playerY3=380;
+}
+};
+
+//Timer Count
+var timer = function(){
+    
+fill(0, 0, 0);
+textSize(15);
+if(finish===false)
+{
+    numTimPerSecond+=1;
+    
+    if(numTimPerSecond>60)
+    {
+        time2+=1;
+        numTimPerSecond=0;
+    }
+}
+text("Time: "+time2+" seconds",7,398);
+text("Time: "+time2+" seconds",7,398);
+text("Time: "+time2+" seconds",7,398);
+
+};
+
+//shows you how many level are left
+var levelCount = function(){
+fill(0, 0, 0);
+textSize(15);
+text("level: "+level+"/5",174,12);
+};
+
+//Die Page
+var diePage = function(){
+    
+noStroke();  
+if(dieState2===true)
+{
+    dieS2+=1;
+    fill(158, 2, 2,100);
+    rect(playerX3-1-dieS2,playerY3-1-dieS2,25+dieS2+dieS2,25+dieS2+dieS2);  
+}
+if(dieS2 > 50)
+{
+    dieS2 =0;
+    dieState2 = false;
+    playerX3=0;
+    playerY3=0;
+    keyState=true;
+    end=true;
+    
+}
+
+if(end===true){
+    background(122, 122, 122);
+    button(0,350,75,50,"home","           HOME\n\n\n\n");
+    noStroke();
+    fill(255, 0, 0);
+    textAlign(CENTER,CENTER);
+    textSize(22);
+    text("You Have Touched The Lava, and died",200,20);
+    fill(0, 255, 234);
+    text("Click To Restart",200,250);
+    
+    fill(playerColor);
+    rect(175,150,50,50,5);
+    
+    fill(255, 255, 255);
+    ellipse(191,166,20,20);
+    ellipse(211,166,20,20);
+    
+    fill(0, 0, 0);
+    ellipse(191,166-mouth/2,10,10);
+    ellipse(211,166-mouth/2,10,10);
+    
+    fill(0, 242, 255,150);
+    arc(218,172+frameCount%40,22,-10,-180+66,-66);
+    arc(187,172+frameCount%30,22,-10,-180+66,-66);
+    
+    strokeWeight(2);
+    stroke(0, 0, 0);
+    noFill();
+    arc(200,188,22,-12+mouth,0,180);
+    mouth+=mouthS;
+    if(mouth>5){
+        mouthS=-0.5;
+    }
+    if(mouth<1){
+        mouthS=0.5;
+    }
+    
+}
+
+
+//reset
+mouseClicked=function()
+{
+    if(end===true){
+        level=1;
+        playerX3=0;
+        playerY3=0;
+        end=false;
+        time2=0;
+        numTimPerSecond=0;
+        dieState2=false;
+        keyState=true;
+    }
+    
+};
+
+};
+
+//swithes the levels
+var levelSwitcher = function(){
+
+switch(level){
+
+
+case 1:
+var badG = new badFunction(31,0,55,153); badLook(badG);
+var badG = new badFunction(31,249,55,153); badLook(badG);
+var badG = new badFunction(31,118+frameCount%150,55,20); badLook(badG);
+var badG = new badFunction(131,0,55,153); badLook(badG);
+var badG = new badFunction(131,249,55,153); badLook(badG);
+var badG = new badFunction(131,129+frameCount%120,55,20); badLook(badG);
+var portal = new portalF(375,375,25,25); portalL(portal);  
+break;
+
+case 2:
+var badG = new badFunction(0,310,340,34); badLook(badG);
+var badG = new badFunction(0,310-80-80,340,34); badLook(badG);
+var badG = new badFunction(60,310-80,340,34); badLook(badG);
+var badG = new badFunction(60,310-80-80-80,340,34); badLook(badG);
+var portal = new portalF(256,0,25,25); portalL(portal);  
+break;
+
+case 3:
+var badG = new badFunction(0+frameCount%300,310-45-100,100,45); badLook(badG);
+var badG = new badFunction(300-frameCount%300,310-100,100,45); badLook(badG);
+var badG = new badFunction(0+frameCount%100*3,310-45,100,45); badLook(badG);
+var badG = new badFunction(300-frameCount%100*3,310,100,45); badLook(badG);
+
+
+var portal = new portalF(135,375,25,25); portalL(portal);  
+break;
+
+case 4:
+var badG = new badFunction(0,310-20,100,45); badLook(badG);
+var badG = new badFunction(150,310-20,250,45); badLook(badG);
+var badG = new badFunction(0,310-100-80,100,45); badLook(badG);
+var badG = new badFunction(150,310-100-80,250,45); badLook(badG);
+var badG = new badFunction(0,310-100,100+200,45); badLook(badG);
+var badG = new badFunction(350,310-100,250,45); badLook(badG);
+var badG = new badFunction(150,0+frameCount%265,45,45); badLook(badG);
+var portal = new portalF(368,60,25,25); portalL(portal);
+break;
+
+case 5:
+var badG = new badFunction(12*25,0*25,25,100); badLook(badG);
+var badG = new badFunction(12*25,6*25,25,250); badLook(badG);
+var badG = new badFunction(9*25+15,2*25,25,350); badLook(badG);
+var badG = new badFunction(9*25+15,0*25,25,10); badLook(badG);
+var badG = new badFunction(7*25+5,10*25,25,350); badLook(badG);
+var badG = new badFunction(7*25+5,0*25,25,203); badLook(badG);
+var badG = new badFunction(5*25+10,frameCount%375,25,25); badLook(badG);
+var badG = new badFunction(3*25+10,frameCount%375,25,25); badLook(badG);
+var badG = new badFunction(4*25+10,375-frameCount%375,25,25); badLook(badG);
+var badG = new badFunction(2*25+10,375-frameCount%375,25,25); badLook(badG);
+    
+
+var portal = new portalF(0,375,25,25); portalL(portal);  
+
+break;
+
+case 6:
+finish=true;
+break;
+
+}};
+
+//Finish page
+var finishPage = function(){
+    fill(0, 0, 0);
+    textAlign(CENTER,CENTER);
+    textSize(45);
+    TXT_look(200,124, "It took you\n''"+time2+" seconds''\nto finish",39,color(0, 0, 0), color(148, 148, 148),2);
+    textSize(20);
+    fill(0, 0, 0);
+    text("\nMake a spin-off, and\nshare your score in the Tips/Thanks",200,211);
+    TXT_look(200,28, "CONGRATULATIONS",35,color(255, 0, 0), color(171, 10, 10),2);
+        
+    
+    fill(0, 187, 255);
+    rect(0,350,400,50);
+    
+    fill(0, 0, 0,100);
+    rect(175-frameCount%20/2,207+150,50+frameCount%20/2+frameCount%20/2,20,5);
+    
+    fill(playerColor);
+    rect(175,150+150+frameCount%20,50,50,5);
+    
+    fill(255, 255, 255);
+    ellipse(191,166+150+frameCount%20,20,20);
+    ellipse(211,166+150+frameCount%20,20,20);
+    
+    fill(0, 0, 0);
+    ellipse(191,166-mouth/2+150+frameCount%20,10,10);
+    ellipse(211,166-mouth/2+150+frameCount%20,10,10);
+    
+    strokeWeight(2);
+    stroke(0, 0, 0);
+    noFill();
+    arc(200,183+149+frameCount%20,22,20,0,180);
+    
+    
+    button(0,350,75,50,"home","           HOME\n\n\n\n");
+    noStroke();
+};
+
+//puase functions
+var puase = function(){
+    
+    if(puaseState===false)
+    {
+        fill(255, 255, 255);
+        strokeWeight(2);
+        stroke(0, 0, 0);
+        if(mouseX<350+50&&mouseX>350&&mouseY<50&&mouseY>0)
+        {
+            fill(0, 115, 255);
+            strokeWeight(4);
+        }
+
+        rect(350,0,50,50);
+        fill(0, 0, 0);
+        rect(357,7,15,37);
+        rect(378,7,15,37);
+        if(mouseIsPressed&&mouseX<350+50&&mouseX>350&&mouseY<50&&mouseY>0)
+        {
+            puaseState=true;
+        }
+        
+    }    
+    
+    if(puaseState===true)
+    {
+        
+        button(0,350,75,50,"home","           HOME\n\n\n\n");
+            
+        fill(255, 255, 255);
+        strokeWeight(2);
+        stroke(0, 0, 0);
+        if(mouseX<350+50&&mouseX>350&&mouseY<50+50&&mouseY>50)
+        {
+            fill(0, 115, 255);
+            strokeWeight(4);
+        }
+
+        rect(350,50,50,50);
+        fill(0, 0, 0);
+        noStroke();
+        arc(391,76,50,50,148,213);
+        
+        if(mouseIsPressed&&mouseX<350+50&&mouseX>350&&mouseY<50+50&&mouseY>50)
+        {
+            puaseState=false;
+        }
+
+    }
+};
+
+//Draws the whole game blocks, in order
+var game = function()
+{
+    back();
+    if(puaseState===false)
+    {
+        player();
+        levelSwitcher();
+        timer();
+        levelCount();
+    }
+    puase();
+    diePage();
+};
+
+
+
+//Animates The Game
+
+    if(startState2===false)
+    {
+        game();
+    
+        if(finish===true)
+        {
+        back();
+        finishPage();
+        }
+    }
+    
+    if(startState2===true)
+    {
+        back();
+        
+        if(HowTo===false&&playerColor_page===false){
+        TXT_look(158+buttonX,57, "SquareBert",57,color(0, 255, 255), color(9, 0, 255),2);
+        TXT_look(350,43-buttonX*3, "2",100,color(255, 0, 0), color(122, 0, 0),3);
+        stroke(0, 0, 0);
+        strokeWeight(2);
+        fill(255, 0, 0);
+        if(mouseX<50+130+buttonX&&mouseX>50+buttonX&&mouseY<150+60&&mouseY>150)
+        {
+            fill(0, 98, 255);
+        }
+        if(mouseIsPressed&&mouseX<50+130+buttonX&&mouseX>50+buttonX&&mouseY<150+60&&mouseY>150)
+        {
+            startState2=false;
+        }
+        rect(50+buttonX,150,130,60,10);
+        textAlign(0,0);
+        fill(0, 0, 0);
+        textSize(40);
+        text("PLAY",65+buttonX,195);
+        
+        textAlign(0,0);
+        textSize(40);
+
+        fill(255, 0, 0);
+        if(mouseX<50+130+170+buttonX&&mouseX>50+170+buttonX&&mouseY<150+60&&mouseY>150)
+        {
+            fill(0, 98, 255);
+        }
+        if(mouseIsPressed&&mouseX<50+130+170+buttonX&&mouseX>50+170+buttonX&&mouseY<150+60&&mouseY>150)
+        {
+            HowTo=true;
+        }
+        rect(220+buttonX,150,130,60,10);
+        fill(0, 0, 0);
+        text("HowTo",52+170+buttonX,192);
+        
+        
+        button(100,350,75,50,"home","HOME      \n\n\n\n");
+        textAlign(0,0);
+        
+        fill(255, 0, 0);
+        if(mouseX<50+130+170-80+buttonX&&mouseX>50+170-80+buttonX&&mouseY<150+60+100&&mouseY>150+100)
+        {
+            fill(0, 98, 255);
+        }
+        if(mouseIsPressed&&mouseX<50+130+170-80+buttonX&&mouseX>50+170-80+buttonX&&mouseY<150+60+100&&mouseY>150+100)
+        {
+            playerColor_page=true;
+        }
+        rect(220-80+buttonX,150+100,130,60,10);
+        fill(0, 0, 0);
+        textSize(25);
+        text("Customise\n    Player",52+95+buttonX,275);
+
+        
+        buttonX-=4;
+        if(buttonX<1)
+        {
+            buttonX=1;
+        }
+        
+        
+        }
+        if(HowTo===true)
+        {
+            fill(255, 0, 0);
+        if(mouseX<0+100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+        {
+            fill(0, 98, 255);
+        }
+            rect(0,350,100,50,10); 
+            fill(0, 0, 0);
+            textSize(30);
+            text("BACK",8,192+194);
+            textSize(20);
+            text("Welcome To SquareBert 2\n\nINSTRUCTIONS:\n(1) - Use the arrow-keys to move\n(2) - don't touch the lava\n(3) - Get to the Portal, so you can go to the\nnext level\n\n(4) - Try to beat the game with the least\namount of time as possible\n\nGOOD LUCK :)",8,29);
+            
+            if(mouseIsPressed&&mouseX<0+100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+            {
+                HowTo=false;
+            }
+        }
+        //player Color page
+        if(playerColor_page===true)
+        {
+            fill(playerColor);
+            rect(175,150+150,50,50,5);
+            
+            fill(255, 255, 255);
+            ellipse(191,166+150,20,20);
+            ellipse(211,166+150,20,20);
+            
+            fill(0, 0, 0);
+            ellipse(191,166-mouth/2+150,10,10);
+            ellipse(211,166-mouth/2+150,10,10);
+            
+            fill(0, 9, 255);
+            rect(0,0,50,50);
+            if(mouseIsPressed&&mouseX<0+50&&mouseX>0&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(0, 9, 255);
+            }
+            fill(255, 0, 0);
+            rect(50,0,50,50);
+            if(mouseIsPressed&&mouseX<0+100&&mouseX>50&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(255, 0, 0);
+            }
+            fill(0, 255, 30);
+            rect(100,0,50,50);
+            if(mouseIsPressed&&mouseX<0+150&&mouseX>100&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(0, 255, 30);
+            }
+            fill(255, 136, 0);
+            rect(150,0,50,50);
+            if(mouseIsPressed&&mouseX<0+200&&mouseX>150&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(255, 136, 0);
+            }            
+            fill(230, 255, 0);
+            rect(200,0,50,50);
+            if(mouseIsPressed&&mouseX<0+250&&mouseX>200&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(230, 255, 0);
+            }
+            fill(0, 0, 0);
+            rect(250,0,50,50);
+            if(mouseIsPressed&&mouseX<0+300&&mouseX>250&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(0, 0, 0);
+            }
+            fill(255, 0, 255);
+            rect(300,0,50,50);
+            if(mouseIsPressed&&mouseX<0+350&&mouseX>300&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(255, 0, 255);
+            }
+            fill(109, 0, 115);
+            rect(350,0,50,50);
+            if(mouseIsPressed&&mouseX<0+400&&mouseX>350&&mouseY<0+50&&mouseY>0)
+            {
+                playerColor=color(109, 0, 115);
+            }
+            
+            fill(255, 0, 0);
+            if(mouseX<0+100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+            {
+            fill(0, 98, 255);
+            }
+            rect(0,350,100,50,10); 
+            fill(0, 0, 0);
+            textSize(30);
+            text("BACK",8,192+194);
+            if(mouseIsPressed&&mouseX<0+100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+            {
+                playerColor_page=false;
+            }
+            
+            
+        }
+        
+    }
+
+
+};
+
+//ZombieX
+{
+var sounds = {
+killZombie: getSound("rpg/giant-hyah"),
+
+};
+var ZBX = -400;
+//zombie pos
+var zombie1 = 0;
+var zombie2 = 0;
+var zombie3 = 0;
+var zombie4 = 0;
+var zombie5 = 0;
+
+//end state
+var end5=false;
+var points = 0;
+
+//Acel
+var acceleration5 = 0;
+
+//Zombie stuff
+var head = 0;
+var legs = 0;
+var legsSPPEED = 1;
+var killCursor = false;
+var killCursorS = 0;
+
+//Start & how to state
+var startScreen5 = true;
+var howTo5 = false;
+}
+var zombieX = function(){
+
+background(0, 255, 238);
+    
+if(startScreen5 ===false){
+if(end5===false){    
+acceleration5-=0.0005;   
+    
+//zombie 1    
+zombie1-=random(0.5,1)-acceleration5;
+if(zombie1<-350){
+end5=true;
+}    
+
+
+//Zombie 2
+zombie2-=random(0.5,1)-acceleration5;
+if(zombie2<-350){
+end5=true;
+}    
+
+
+//Zombie 3
+zombie3-=random(0.5,1)-acceleration5;
+if(zombie3<-350){
+end5=true;
+}    
+
+
+
+
+//Zombie 4
+zombie4-=random(0.5,1)-acceleration5;
+if(zombie4<-350){
+end5=true;
+}    
+
+
+
+//Zombie 5
+fill(2, 145, 26);
+zombie5-=random(0.5,1)-acceleration5;
+if(zombie5<-350){
+end5=true;
+}    
+
+
+textSize(25);
+fill(0, 0, 0);
+textAlign(CENTER,CENTER);
+text("Zombie's killed - "+points,200,30);
+}
+
+// Draw the image at its default size
+var grass = getImage("cute/GrassBlock");
+
+
+
+// Draw a smaller image
+
+for(var i2 = 0;i2<420;i2+=40){
+for(var i = 0;i<420;i+=100){
+image(grass, -4+i, 54+i2, 100, 80);
+}
+}
+
+
+//end point
+fill(255, 0, 0);
+noStroke();
+rect(0,71,20,328);
+fill(255, 255, 255,10);
+for(var i = 0;i<20;i+=1){
+rect(0,71,1+i,328);
+}
+
+//Zombie look
+var ZombieLook = function(facePosition) {
+    var zombieShirt = color(143, 2, 194);
+    var faceX = facePosition.x;
+    var faceY = facePosition.y;
+    
+    
+    
+    strokeWeight(8);
+    stroke(zombieShirt);
+    line(faceX+2,faceY+50 ,faceX+14,faceY+38);
+    line(faceX+48,faceY+50 ,faceX+27,faceY+32);
+    
+    strokeWeight(14);
+    stroke(0, 123, 255);
+    line(faceX+35+legs,faceY+67,faceX+33,faceY+52);
+    line(faceX+18-legs,faceY+67,faceX+20,faceY+50);
+    
+    noStroke();
+    
+    fill(zombieShirt);
+    rect(faceX+10, faceY+30,30,27);
+    
+    noStroke();
+    fill(97, 97, 97);
+    rect(faceX-5, faceY+15+head,60,40-30);
+    rect(faceX-6, faceY+12+head,3,36-29+10);
+    rect(faceX-6+60, faceY+12+head,3,36-30+10);
+    
+    fill(22, 219, 0);
+    rect(faceX, faceY+head,50,40,10);
+    
+    stroke(0, 135, 7);
+    strokeWeight(2);
+    noFill();
+    beginShape();
+    vertex(faceX+7,faceY+37+head);
+    vertex(faceX+15,faceY+33+head);
+    vertex(faceX+23,faceY+37+head);
+    vertex(faceX+30,faceY+33+head);
+    vertex(faceX+35,faceY+37+head);
+    endShape();
+    
+    noStroke();
+    
+    fill(255, 255, 255);
+    ellipse(faceX+11,faceY+16+head,18,24);
+    ellipse(faceX+15+15,faceY+16+head,16,19);
+    
+    
+    fill(0, 0, 0);
+    ellipse(faceX+10-2,faceY+16+head,10,10);
+    ellipse(faceX+15+15-2,faceY+16+head,10,10);
+    
+    
+
+};
+
+//Zombie pos
+var positions = [
+  {x: 310+zombie1+20, y: 20},
+  {x: 310+zombie2+20, y: 20+70},
+  {x: 310+zombie3+20, y: 20+140},
+  {x: 310+zombie4+20, y: 20+140+70},
+  {x: 310+zombie5+20, y: 20+140+140},
+];
+
+for (var i = 0; i < positions.length; i++) {
+    ZombieLook(positions[i]);
+}
+head+=0.05-acceleration5/2;
+if(head>3){
+head=0;    
+}
+//Speed of legs
+legs+=legsSPPEED;
+if(legs>5)
+{
+    legsSPPEED=-1+acceleration5;    
+}
+if(legs<-8)
+{
+    legsSPPEED=1-acceleration5;  
+}
+
+
+//When you die
+if(end5===true){
+background(0, 230, 255);
+textSize(30);
+fill(0, 102, 20);
+text("You killed "+points+" zombies",200,200);
+
+
+button(0,350,75,50,"home","           HOME\n\n\n\n");
+noStroke();
+
+ZBX+=3;
+if(ZBX>1)
+{
+    ZBX=1;
+}
+    //Try again
+    fill(4, 125, 0);
+    if(mouseX<50+300+ZBX&&mouseX>50+ZBX&&mouseY<150+100+100&&mouseY>150+100)
+    {
+        fill(0, 255, 30);
+    }
+    rect(50+ZBX,150+100,300,100);
+    textSize(51);
+    fill(0, 255, 30);
+    if(mouseX<50+300+ZBX&&mouseX>50+ZBX&&mouseY<150+100+100&&mouseY>150+100)
+    {
+        fill(4, 125, 0);
+    }
+    text("TRY AGAIN",200+ZBX,197+100);
+    if(mouseIsPressed&&mouseX<50+300+ZBX&&mouseX>50+ZBX&&mouseY<150+100+100&&mouseY>150+100){
+        
+        ZBX=-400;        
+        zombie1 = 0;
+        zombie2 = 0;
+        zombie3 = 0;
+        zombie4 = 0;
+        zombie5 = 0; 
+        acceleration5 = 0;
+        end5=false;
+        points=0;
+        
+    }
+    
+
+
+}
+//Kill zombie
+mouseClicked=function(){
+    if(end5===false){
+        if(mouseIsPressed&&mouseX<334+50+zombie1&&mouseX>344+zombie1&&mouseY<36+50&&mouseY>36)
+        {
+            zombie1=random(80,220);      
+            points+=1;
+            playSound(sounds.killZombie);
+            killCursor=true;
+
+        }
+        
+        if(mouseIsPressed&&mouseX<334+50+zombie2&&mouseX>344+zombie2&&mouseY<36+50+70&&mouseY>36+70)
+        {
+            zombie2=random(80,220);   
+            points+=1;
+            playSound(sounds.killZombie);
+            killCursor=true;
+
+        }
+        if(mouseIsPressed&&mouseX<334+50+zombie3&&mouseX>344+zombie3&&mouseY<36+50+140&&mouseY>36+140)
+        {
+            zombie3=random(80,220);   
+            points+=1;
+            playSound(sounds.killZombie);
+            killCursor=true;
+
+        }
+        
+        if(mouseIsPressed&&mouseX<334+50+zombie4&&mouseX>344+zombie4&&mouseY<36+50+140+70&&mouseY>36+140+70)
+        {
+            zombie4=random(80,220);   
+            points+=1;
+            playSound(sounds.killZombie);
+            killCursor=true;
+
+        }
+        if(mouseIsPressed&&mouseX<334+50+zombie5&&mouseX>344+zombie5&&mouseY<36+50+140+140&&mouseY>36+140+140)
+        {
+            zombie5=random(80,220);   
+            points+=1;
+            playSound(sounds.killZombie);
+            killCursor=true;
+
+        }
+    }
+
+};
+
+
+if(killCursor===true){
+fill(242, 255, 0);
+ellipse(mouseX-1,mouseY+3,52,47);
+arc(mouseX-33-5,mouseY,50,50,-25,33);
+arc(mouseX+32+5,mouseY+5,50,50,-25+180,33+180);
+arc(mouseX+-3,mouseY+31+5,50,50,-25+180+90,33+180+90);
+arc(mouseX+-3,mouseY+-30-5,50,-50,-25+180+90,33+180+90);
+
+fill(255, 157, 0);
+ellipse(mouseX-1,mouseY+3,30,30);
+arc(mouseX-33,mouseY,50,50,-25,33);
+arc(mouseX+32,mouseY+5,50,50,-25+180,33+180);
+arc(mouseX+-3,mouseY+31,50,50,-25+180+90,33+180+90);
+arc(mouseX+-3,mouseY+-30,50,-50,-25+180+90,33+180+90);
+}
+
+stroke(71);
+noFill();
+strokeWeight(5);
+ellipse(mouseX-1,mouseY+3,30,30);
+
+fill(71);
+noStroke();
+rect(mouseX-15,mouseY,30,4);  
+rect(mouseX-3,mouseY-12,4,30);    
+
+if(killCursor===true){
+killCursorS+=1;    
+}
+if(killCursorS>3){
+killCursor=false; 
+killCursorS=0;
+}
+}
+
+  
+    if(startScreen5===true){
+        textAlign(CENTER,CENTER);
+        //background
+        background(0, 255, 255);
+        stroke(0, 0, 0);
+        
+        
+        //TXT menu
+        fill(0, 158, 21);
+        textSize(35);
+        text("ZOMBIE\nKill",200,49-15);
+        stroke(9, 77, 2);
+        strokeWeight(4);
+        //PLAY
+        fill(102, 255, 0);
+        if(mouseX<50+300-60&&mouseX>50+30&&mouseY<150+100-50&&mouseY>150-50)
+        {
+            fill(15, 115, 0);
+        }
+        rect(50+30,150-50,300-60,100);
+        textSize(80);
+        fill(15, 115, 0);
+        if(mouseX<50+300-60&&mouseX>50+30&&mouseY<150+100-50&&mouseY>150-50)
+        {
+            fill(102, 255, 0);
+        }
+        text("PLAY",200,197-50);
+        
+        if(mouseIsPressed&&mouseX<50+300-60&&mouseX>50+30&&mouseY<150+100-50&&mouseY>150-50){
+            startScreen5=false;
+        }
+        
+        
+        
+    //How to    
+    fill(102, 255, 0);
+    if(mouseX<50+300-60&&mouseX>50+30&&mouseY<150+100+100-45&&mouseY>150+100-45)
+    {
+        fill(15, 115, 0);
+    }
+    
+    rect(50+30,150+100-45,300-60,100);
+    textSize(68);
+    fill(15, 115, 0);
+    if(mouseX<50+300-60&&mouseX>50+30&&mouseY<150+100+100-45&&mouseY>150+100-45)
+    {
+    fill(102, 255, 0);
+    }
+    text("How To",200,197+100-45);
+    if(mouseIsPressed&&mouseX<50+300-60&&mouseX>50+30&&mouseY<150+100+100-45&&mouseY>150+100-45)
+    {
+        howTo5=true;
+    }  
+
+    
+        
+    var menuGrass = getImage("cute/GrassBlock");
+    image(menuGrass, -2, 338, 100, 80);
+    image(menuGrass, 98, 338, 100, 80);
+    image(menuGrass, 198, 338, 100, 80);
+    image(menuGrass, 298, 338, 100, 80);
+    image(menuGrass, 398, 338, 100, 80);
+    
+    var zombieManuX = -71;
+    
+    stroke(0, 17, 255);
+    strokeWeight(12);
+    line(155+zombieManuX,391,156+zombieManuX,372);
+    line(176+zombieManuX,391,165+zombieManuX,372);
+    
+    
+    stroke(223, 107, 255);
+    strokeWeight(10);
+    line(135+zombieManuX,363,151+zombieManuX,354);
+    
+    
+    noStroke();
+    fill(133, 0, 163);
+    rect(148+zombieManuX,343,29,31);
+    stroke(75, 0, 94);
+    strokeWeight(10);
+    line(162+zombieManuX,368,175+zombieManuX,354);
+    
+    
+    noStroke();
+    fill(99, 99, 99);
+    rect(137+zombieManuX,335,52,5);
+    rect(134+zombieManuX,332,5,10);
+    rect(187+zombieManuX,332,5,10);
+    
+    
+    fill(15, 186, 6);
+    rect(140+zombieManuX,319,46,35,10);
+    fill(255, 255, 255);
+    ellipse(152+zombieManuX,332,12,18);
+    ellipse(165+zombieManuX,333,12,13);
+    
+    fill(0, 0, 0);
+    ellipse(149+zombieManuX,333,6,6);
+    ellipse(162+zombieManuX,333,6,6);
+    
+    fill(0, 79, 14);
+    ellipse(156+zombieManuX,347,12,10);
+    
+    
+    
+    noStroke();
+    var manX = 125;
+    var man = color(255, 170, 66);
+    var man2 = color(255, 170, 66);
+    var yManMenu = 170;
+    var xMasnMenu = 62;
+    
+    
+    //back hand
+    fill(man);
+    rect(manX+96+xMasnMenu,174+yManMenu,17,14,5); 
+    rect(manX+109+xMasnMenu,177+yManMenu,32,9,5);
+    
+    
+    //tilted arm
+    stroke(man);
+    strokeWeight(8);
+    line(297+xMasnMenu,180+yManMenu,313+xMasnMenu,202+yManMenu);
+    strokeWeight(12);
+    line(316.5+xMasnMenu,212+yManMenu,315+xMasnMenu,208+yManMenu);
+    stroke(man2);
+    strokeWeight(5);
+    line(319+xMasnMenu,208+yManMenu,328+xMasnMenu,211+yManMenu);
+    
+    
+    //face
+    noStroke();
+    fill(man);
+    ellipse(318+xMasnMenu,218+yManMenu,5,5);
+    ellipse(324+xMasnMenu,216+yManMenu,5,5);
+    ellipse(278+xMasnMenu,159+yManMenu,40,30);
+    rect(270+xMasnMenu,171+yManMenu,18,30);
+    
+    
+    //sun glasses
+    fill(0, 0, 0);
+    arc(267+xMasnMenu,158+yManMenu,12,12,0,180);
+    arc(282+xMasnMenu,158+yManMenu,12,12,0,180);
+    rect(258+xMasnMenu,158+yManMenu,40,2);
+    
+    fill(138, 104, 3);
+    arc(275+xMasnMenu,158+yManMenu,35,29,-178,-42);
+    arc(282+xMasnMenu,158+yManMenu,35,29,-132,-1);
+    
+    
+    //shirt 
+    fill(0, 128, 255);
+    rect(manX+135+xMasnMenu,176+yManMenu,41,33,5);
+    fill(255, 0, 0);
+    
+    //pants
+    rect(260+xMasnMenu,226-22+yManMenu,19,23);
+    rect(282+xMasnMenu,226-22+yManMenu,19,23);
+    rect(273+xMasnMenu,226-22+yManMenu,19,8);
+    
+    
+    //fire comming out of the gun
+    fill(255, 247, 0);
+    arc(58+manX+xMasnMenu,163+yManMenu,20,20,10,40);
+    arc(58+manX+xMasnMenu,172+yManMenu,20,20,-29,0);
+    arc(52+manX+xMasnMenu,168+yManMenu,29,34,-8,8);
+    
+    
+    //gun
+    fill(77, 77, 77);
+    rect(manX+92+xMasnMenu,173+yManMenu,15,15);   
+    rect(manX+96-30+xMasnMenu,164+yManMenu,15+25,10);  
+    
+    
+    //front fingers
+    fill(man2);
+    rect(manX+100+xMasnMenu,174+yManMenu,15,5,5); 
+    rect(manX+90+xMasnMenu,174+yManMenu,6,5,5); 
+    rect(manX+90+xMasnMenu,178+yManMenu,6,5,5);
+    rect(manX+90+xMasnMenu,182+yManMenu,6,5,5);
+    
+    
+    fill(245, 174, 8,200);
+    ellipse(204,339,10,10);
+    ellipse(209,339,8,8);
+    ellipse(214,339,6,6);
+    
+    fill(189, 135, 0);
+    ellipse(200,339,10,10);
+    
+    fill(74, 74, 74);
+    ellipse(200,339,10,10);
+
+    stroke(133, 64, 7);
+    noFill();
+    strokeWeight(3);
+    arc(339,334,19,12,22,118);
+    noStroke();
+    
+    button(175,350,75,50,"home","HOME                  \n\n\n\n");
+    noStroke();
+    
+    }
+    
+    //How to TXT
+    if(howTo5===true){
+        background(0, 255, 230);
+        textSize(20);
+        fill(0, 0, 0);
+        textAlign(0,0);
+        text("Your backyard is infested with ZOMBIES\nYou need to destroy them\n(1) - Click on the Zombies, to destroy them\n(2) - Don't let the Zombies reach the other\nside\n\nThe Zombies will get faster as you play\nGOOD LUCK :)",4,75); 
+        
+        fill(102, 255, 0);
+        if(mouseX<100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+        {
+            fill(15, 115, 0);
+        }
+        
+        //BACK
+        rect(0,350,100,50);
+        textSize(40);
+        fill(15, 115, 0);
+        if(mouseX<100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+        {
+            fill(102, 255, 0);
+        }
+        text("Back",6,390); 
+        if(mouseIsPressed&&mouseX<100&&mouseX>0&&mouseY<350+50&&mouseY>350)
+        {
+            howTo5=false;
+        }
+                
+    }
+    
+    if(startScreen5===true){        
+    noStroke();
+    fill(21, 181, 4);
+    rect(mouseX-7.5,mouseY+13,15,20);
+    arc(mouseX,mouseY,50,50,60,120);
+    fill(255, 255, 255,150);
+    arc(mouseX,mouseY+3,40,40,90,115);
+    }
+    
+
+
+
+};
+
+//Main swither of pages
+draw = function() {
+
+        if(page==="home"&&mouseX<50+300-50&&mouseX>50+50&mouseY<300+40&&mouseY>300&&mouseIsPressed)
+    {
+        println("\n\nhttps://www.khanacademy.org/profile/IsaacEmerald/projects");
+    }
+
+colorLeader+=colorLeaderS;
+if(colorLeader>255)
+{
+    colorLeaderS=-5;
+}
+if(colorLeader<1)
+{
+    colorLeaderS=5;
+}  
+
+cursor(ARROW);    
+//Switches the pages    
+switch(page){    
+
+//home
+case "home":
+    
+//Back fill
+background(138, 255, 252);
+
+//Zombie(character)
+fill(0, 0, 0,100);
+ellipse(45,170,70,30);
+
+fill(136, 2, 143);
+rect(25,130,19,45,10);
+rect(25+20,130,19,45,10);
+fill(0, 94, 255);
+rect(25,100,40,50,10);
+fill(0, 189, 6);
+rect(20,70,50,45,10);
+fill(255, 255, 255);
+ellipse(54,85,22,22-frameCount%20);
+ellipse(36,85,22,25-frameCount%18);
+fill(0, 0, 0);
+ellipse(54,85,15,15-frameCount%20);
+ellipse(36,85,15,15-frameCount%18);
+fill(255, 0, 0);
+ellipse(46,107,15,10);
+
+strokeWeight(12);
+stroke(0, 94, 255);
+line(64,120,80,140);
+line(26,120,13,140);
+
+
+fill(0, 245, 29);
+strokeWeight(4);
+
+if(mouseX<50+300-50&&mouseX>50+50&mouseY<300+40&&mouseY>300)
+{
+    fill(30, 163, 3);
+    cursor(HAND);
+}
+
+stroke(16, 122, 0);
+rect(50+50,300,300-50-50,40,5);
+
+fill(4, 71, 0);
+textSize(25);
+textAlign(CENTER,CENTER);
+text(">MORE GAMES<",200,320);
+
+
+
+//Game buttons
+button(125,63,150,40,"PD","Pixel Dash");
+button(125,110,150,40,"SS","Spidey Square\n");
+button(125,157,150,40,"wmsgF","WMSG\n\n");
+button(125,204,150,40,"SQ2F","SquareBert 2\n\n\n");
+button(125,251,150,40,"zombieXX","Zombie Kill\n\n\n\n");
+
+//Mini Game (TXT)
+stroke(255-colorLeader, 195, 0+colorLeader);
+fill(255, 255, 255);
+rect(0,0,400,55);
+
+textFont(createFont("Tahoma Bold"), 50);
+textSize(35);
+fill(255, 119, 0);
+text("MINI",200-75,20+10);
+
+textSize(50);
+fill(0, 0, 0,150);
+text("GAMES",260,23+5);
+fill(0, 148, 10);
+text("GAMES",260,20+5);
+textFont(createFont("Calabri (body)"), 50);
+
+//Coll character (1)
+noStroke();
+fill(0, 0, 255);
+rect(0,350,50,50,5);
+fill(255, 255, 255);
+ellipse(15,365,20,20);
+ellipse(15+24,365,20,20);
+fill(0, 0, 0);
+ellipse(15+3,365,12,12);
+ellipse(15+24+3,365,12,12);
+fill(255, 102, 255);
+ellipse(25,388,18,15);
+
+for(var i2 =0;i2<34;i2+=50/3){
+for(var i =0;i<34;i+=50/3){
+fill(random(0,300), 0, 0);
+rect(60+i,350+i2,50/3,50/3);
+}
+}
+
+fill(0, 0, 0);
+textSize(30);
+text("!?",25,335);
+
+//Character (2)
+fill(0, 0, 0);
+pushMatrix();
+rotate(-20);
+rect(252,278,30,30);
+rect(252-33,278,30,2);
+rect(252-33,278+30/2.5,30,2);
+rect(252-33,278+30/1.2,30,2);
+popMatrix();
+ellipse(259+35,60,15,15);
+ellipse(259+30,60+15,5,5);
+ellipse(259+50,40+15,5,5);
+stroke(0, 0, 0);
+strokeWeight(3);
+line(295,60,350,200-20);
+noStroke();
+fill(255, 255, 255);
+ellipse(345,182,14,14);
+ellipse(357,182-4,14,14);
+fill(0, 0, 0);
+ellipse(345+3,182-2,8,8);
+ellipse(357+3,182-4-2,8,8);
+
+
+break;    
+
+//Pixel Dash (call)
+case "PD":
+PixelDash();
+break;
+//Spidey Square (call)
+case "SS":
+SpideySaure();
+break;
+
+//wmsg (call)
+case "wmsgF":
+wmsg();    
+break;
+//SQ2 (call)
+case "SQ2F":
+SQ2();
+break;
+case "zombieXX":
+zombieX();
+break;
+
+}
+
+
+
+};
+
